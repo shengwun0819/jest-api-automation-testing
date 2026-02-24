@@ -1,4 +1,4 @@
-# 發布 Jest 報告到 GitHub Pages（API Tests 成功或失敗後皆可發布）
+# 發布 Allure 報告到 GitHub Pages（API Tests 完成後觸發）
 name: Publish Test Report
 
 on:
@@ -15,16 +15,16 @@ jobs:
     if: github.event.workflow_run.conclusion == 'success' || github.event.workflow_run.conclusion == 'failure'
 
     steps:
-      - name: Download Jest Report
+      - name: Download test_report (Allure 報告，含 index.html)
         uses: actions/download-artifact@v4
         with:
-          name: jest-report-node20
-          path: jest-report
+          name: test-report-node20
+          path: test-report
 
       - name: Deploy to GitHub Pages
-        if: github.ref == 'refs/heads/main' && hashFiles('jest-report/**') != ''
+        if: github.ref == 'refs/heads/main' && hashFiles('test-report/**') != ''
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./jest-report
+          publish_dir: ./test-report
           destination_dir: ./test-report

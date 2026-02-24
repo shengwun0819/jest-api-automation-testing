@@ -27,7 +27,7 @@ const jestOptions = {
     if (useHtmlReporter) {
       const now = new Date();
       const datetime = now.toISOString().slice(0, 19).replace(/:/g, '-').replace('T', '_');
-      const reportDir = path.join(__dirname, '../reports');
+      const reportDir = path.join(__dirname, '../test_report');
       const { results } = await jest.runCLI(
         {
           ...jestOptions,

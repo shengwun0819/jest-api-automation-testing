@@ -49,7 +49,7 @@
 
 ### 4. 可選 Koa 伺服器
 
-- **app.js**：Koa + bodyParser + 路由 + 靜態 reports。
+- **app.js**：Koa + bodyParser + 路由 + 靜態 test_report。
 - **server.js**：啟動 app，監聽 `PORT`。
 - **routers/sit.js**：`/health-check`、`/run-test`（僅單次執行，無 start/stop 壓測迴圈）。
 - **controllers/run-test.js**：以 Worker 執行 Jest 一次，回傳 `pass`、失敗數、報告檔名（不包含 S3/Slack 等外部整合）。

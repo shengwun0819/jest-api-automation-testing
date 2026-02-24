@@ -14,21 +14,22 @@
 - `npm ci` 安裝依賴
 - `npm run lint` 執行 ESLint
 - 啟動專案內 **Mock Server**（port 5050），不需真實 API 即可跑測試
-- 使用 `jest.config.ci.js` 執行 Jest（`TARGET_BASE_URL=http://127.0.0.1:5050`），並產生 HTML 報告到 `reports/`
-- 將 `reports/` 上傳為 Artifact（`jest-report-node20`），保留 7 天
+- 使用 `jest.config.allure.js` 執行 Jest（Allure 環境，`TARGET_BASE_URL=http://127.0.0.1:5050`），結果寫入 `allure-results/`
+- 測試結束時 **allure-summary-reporter** 自動產生 `test_report/`（含 `report_{commit}_{result}_{time}.html` 與 `index.html`）
+- 上傳 Artifacts：`allure-results-node20`、`test-report-node20`，保留 7 天
 
-### 2. `publish-report.yml` - 發布測試報告到 GitHub Pages
+### 2. `publish-report.yml` - 發布 Allure 報告到 GitHub Pages
 
 **觸發條件：**
 - `test.yml`（API Tests）完成後自動觸發（成功或失敗皆會跑）
 
 **步驟：**
-- 下載 Artifact `jest-report-node20`
-- 僅在 **main** 分支且有報告檔案時，部署到 GitHub Pages 的 `test-report/` 目錄
+- 下載 Artifact `test-report-node20`
+- 僅在 **main** 分支且有報告檔案時，部署到 GitHub Pages 的 `test-report/` 目錄（可開 `index.html` 或具名報告）
 
-**報告網址（需先於 Repo Settings 啟用 GitHub Pages）：**
+**報告網址（需先於 Repo Settings 啟用 GitHub Pages，Source 選 GitHub Actions）：**
 ```
-https://<username>.github.io/<repository>/test-report/jest-report-ci.html
+https://<username>.github.io/<repository>/test-report/
 ```
 
 ## 與 pytest-automation-testing 的對應
@@ -37,25 +38,35 @@ https://<username>.github.io/<repository>/test-report/jest-report-ci.html
 |--------------------------|----------------------------------------|
 | Python 3.13 + pip        | Node 20.x + npm ci                    |
 | Mock Server (port 5050)  | Mock Server (port 5050)               |
-| pytest + Allure 報告     | Jest + jest-html-reporter 報告        |
-| allure-report artifact   | jest-report-node20 artifact            |
+| pytest + Allure 報告     | Jest + **Allure**（allure-jest）       |
+| allure-report / test_report | test_report（reporter 產出，含 index.html） |
 | publish-report → Pages   | publish-report → Pages（test-report/）|
+
+## 本機產生 Allure 報告
+
+專案已內建 `allure-commandline`（需本機有 **Java**），可直接用 npm 指令：
+
+| 指令 | 說明 |
+|------|------|
+| `npm run test:mock:allure` | 用 Mock 跑測試，結果寫入 `allure-results/` |
+| `npm run report:allure` | 依 `allure-results/` 產生 `allure-report/` |
+| `npm run report:allure:open` | 產生報告並用瀏覽器開啟 |
+| **`npm run test:mock:allure:report`** | 跑測試＋產生報告 |
+| **`npm run test:mock:allure:serve`** | 跑測試＋產生報告＋開瀏覽器 |
+
+建議流程：先開一個終端執行 `npm run mock`，再在另一個終端執行 `npm run test:mock:allure:serve`。
 
 ## 可選：使用真實 API
 
-目前 CI 一律使用 Mock Server，無需設定 Secrets。若未來要對接真實 API，可於 Repo **Settings → Secrets and variables → Actions** 新增：
-
-- `TARGET_BASE_URL`：目標 API 的 base URL（例如 `https://api.example.com`）
-
-並在 `test.yml` 的「Run tests」步驟改為依 Secret 決定是否啟動 Mock、或改為使用 `TARGET_BASE_URL` 環境變數（需自行在 workflow 中加條件與 `env`）。
+目前 CI 一律使用 Mock Server，無需設定 Secrets。若未來要對接真實 API，可於 Repo **Settings → Secrets and variables → Actions** 新增 `TARGET_BASE_URL`，並在 `test.yml` 的「Run tests」步驟改為依 Secret 決定是否啟動 Mock。
 
 ## 查看結果
 
 1. **Actions**：Repo → **Actions** → 選擇「API Tests」或「Publish Test Report」查看日誌。
-2. **下載報告**：在該次 run 頁面底部 **Artifacts** 下載 `jest-report-node20`，解壓後開啟 `jest-report-ci.html`。
-3. **GitHub Pages**：若已啟用並跑過 publish-report，可從上述 `test-report/jest-report-ci.html` 連結查看。
+2. **下載報告**：在該次 run 頁面底部 **Artifacts** 下載 `allure-report-node20`，解壓後開啟 `index.html`。
+3. **GitHub Pages**：若已啟用並跑過 publish-report，從 `https://<username>.github.io/<repo>/test-report/` 查看。
 
 ## 注意事項
 
-- 測試與報告皆在 Ubuntu 環境執行，請確保程式在 Linux 下可跑。
-- `reports/` 已列入 `.gitignore`，不會被 commit；CI 產生的報告僅透過 Artifacts 或 Pages 取得。
+- 測試與報告皆在 Ubuntu 環境執行；報告由 reporter 呼叫 npx allure-commandline 產生，無需 CI 另裝 Allure。
+- `allure-results/`、`allure-report/`、`test_report/` 已列入 `.gitignore`，不會被 commit。

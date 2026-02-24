@@ -14,7 +14,7 @@ const { logger } = require('./libs/logger');
 const app = new Koa();
 app.use(bodyParser());
 app.use(routers.routes()).use(routers.allowedMethods());
-app.use(mount('/reports', serve(path.join(__dirname, 'reports'))));
+app.use(mount('/reports', serve(path.join(__dirname, 'test_report'))));
 
 app.on('error', (e) => logger.error(e.message));
 

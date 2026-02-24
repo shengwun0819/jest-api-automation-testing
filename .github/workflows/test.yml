@@ -1,4 +1,4 @@
-# CI：Node 20 測試 + Mock Server + ESLint + 上傳 Jest 報告
+# CI：Node 20 測試 + Mock Server + ESLint + Allure 報告
 name: API Tests
 
 on:
@@ -32,8 +32,10 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      - name: Prepare reports directory
-        run: mkdir -p reports
+      - name: Prepare allure-results
+        run: |
+          rm -rf allure-results allure-report
+          mkdir -p allure-results
 
       - name: Start Mock Server
         run: |
@@ -41,16 +43,25 @@ jobs:
           sleep 2
           curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:5050/posts || true
 
-      - name: Run tests (with Mock)
+      - name: Run tests (with Mock, Allure)
         env:
           TARGET_BASE_URL: http://127.0.0.1:5050
-        run: npx jest --runInBand --config=jest.config.ci.js
+        run: npx jest --runInBand --config=jest.config.allure.js
 
-      - name: Upload Jest HTML Report
+      - name: Upload Allure Results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: jest-report-node20
-          path: reports/
+          name: allure-results-node20
+          path: allure-results/
+          retention-days: 7
+          if-no-files-found: ignore
+
+      - name: Upload test_report (named report from reporter)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-report-node20
+          path: test_report/
           retention-days: 7
           if-no-files-found: ignore

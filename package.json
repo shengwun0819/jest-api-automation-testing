@@ -8,7 +8,13 @@
     "mock": "node mock_server/server.js",
     "test": "jest --runInBand",
     "test:mock": "TARGET_BASE_URL=http://127.0.0.1:5050 jest --runInBand",
+    "test:allure": "jest --runInBand --config=jest.config.allure.js",
+    "test:mock:allure": "TARGET_BASE_URL=http://127.0.0.1:5050 jest --runInBand --config=jest.config.allure.js",
+    "test:mock:allure:report": "npm run test:mock:allure",
+    "test:mock:allure:serve": "npm run test:mock:allure && npx allure-commandline serve allure-results",
     "test:ci": "node -e \"require('http').get('http://localhost:3000/run-test?stage=' + (process.env.STAGE || 'dev'), r => { let d=''; r.on('data',c=>d+=c); r.on('end',()=>process.exit(JSON.parse(d).pass ? 0 : 1)); }).on('error',()=>process.exit(1))\"",
+    "report:allure": "npx allure-commandline generate allure-results --clean -o test_report",
+    "report:allure:open": "npm run report:allure && npx allure-commandline open test_report",
     "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix"
   },
@@ -27,7 +33,9 @@
       "**/tests/**/*.test.[jt]s?(x)",
       "**/?(*.)+(spec|test).[jt]s?(x)"
     ],
-    "setupFilesAfterEnv": ["jest-extended"],
+    "setupFilesAfterEnv": [
+      "jest-extended"
+    ],
     "globalSetup": "./jest-global-setup.js",
     "testTimeout": 30000
   },
@@ -49,10 +57,14 @@
     "koa-static": "^5.0.0"
   },
   "devDependencies": {
+    "allure-commandline": "^2.24.0",
+    "allure-jest": "^3.2.2",
+    "allure-js-commons": "^3.2.2",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-jest": "^27.6.0",
     "eslint-plugin-prettier": "^5.1.2",
+    "jest-circus": "26.2.2",
     "prettier": "^3.2.4"
   }
 }

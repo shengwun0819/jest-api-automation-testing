@@ -74,6 +74,15 @@ npm run mock    # Terminal 1
 npm run test:mock   # Terminal 2
 ```
 
+**Allure 報告（需 Java）**：專案內建 Allure，可用一條指令跑測試並開報告：
+
+```bash
+npm run mock              # Terminal 1
+npm run test:mock:allure:serve   # Terminal 2：跑測試 + 產生 Allure 報告 + 開瀏覽器
+```
+
+其餘指令見 `package.json` 的 `test:mock:allure`、`report:allure`、`report:allure:open` 等。
+
 **建議**：使用 iTerm / Terminal.app 在專案目錄下執行測試。
 
 ### 4. 以 HTTP 觸發測試（可選）
@@ -126,7 +135,7 @@ curl http://localhost:3000/health-check
 
 ## 測試報告
 
-若透過 `/run-test` 觸發且啟用 HTML reporter，報告會寫入 `reports/`，並可透過 `GET /reports/<檔名>` 存取（需先 `npm start` 並設定靜態目錄）。
+若透過 `/run-test` 觸發且啟用 HTML reporter，報告會寫入 `test_report/`，並可透過 `GET /reports/<檔名>` 存取（需先 `npm start`，靜態目錄為 test_report）。
 
 ## 授權
 
