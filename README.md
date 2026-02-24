@@ -2,7 +2,7 @@
 
 以 Node.js 與 Jest 為基礎的 API SIT（System Integration Test）自動化測試框架範例，展示如何建立可擴展、可維護的 API 測試系統。
 
-## 專案特色
+## 專案說明
 
 - **Jest 測試框架**：使用 Jest 撰寫與執行 API 測試
 - **多階段環境**：透過 `STAGE` 與 `configs/stage-env.js` 切換測試目標
@@ -16,10 +16,10 @@
 .
 ├── configs/           # 設定
 │   ├── config.js     # 環境變數
-│   └── stage-env.js  # 各階段目標網域
+│   └── stage-env.js  # 不同環境 domain
 ├── controllers/       # HTTP 觸發用（僅 run-test：單次執行）
 ├── libs/              # 共用模組（logger, test-woker）
-├── mock_server/       # 本機 Mock API（GET /posts, /users），不依賴外網
+├── mock_server/       # 本機 Mock API（GET /posts, /users）
 │   └── server.js
 ├── routers/           # 路由（health-check, run-test）
 ├── tests/             # Jest 測試與 API client
@@ -66,14 +66,14 @@ npm test
 npx jest --runInBand
 ```
 
-**使用本機 Mock（不依賴外網）**：先 `npm run mock`，再設 `TARGET_BASE_URL=http://127.0.0.1:5050` 後跑測試，或直接：
+**使用本機 Mock**：先 `npm run mock`，再設 `TARGET_BASE_URL=http://127.0.0.1:5050` 後跑測試，或直接：
 
 ```bash
 npm run mock    # Terminal 1
 npm run test:mock   # Terminal 2
 ```
 
-**Allure 報告（需 Java）**：專案內建 Allure，可用一條指令跑測試並開報告：
+**Allure 報告**：專案內建 Allure，可用一條指令跑測試並開報告：
 
 ```bash
 npm run mock              # Terminal 1
@@ -135,7 +135,3 @@ curl http://localhost:3000/health-check
 ## 授權
 
 MIT License
-
-## 致謝
-
-本專案改寫自實際的企業級 API SIT 自動化測試框架，保留 Jest 測試架構與設計模式，移除公司專屬業務與機密資訊，作為學習與可公開參考的範例。
