@@ -1,0 +1,30 @@
+# 發布 Allure report 到 GitHub Pages（API Tests 完成後觸發）
+name: Publish Test Report
+
+on:
+  workflow_run:
+    workflows: ['API Tests']
+    types: [completed]
+
+permissions:
+  contents: write
+
+jobs:
+  publish-report:
+    runs-on: ubuntu-latest
+    if: github.event.workflow_run.conclusion == 'success' || github.event.workflow_run.conclusion == 'failure'
+
+    steps:
+      - name: Download test_report (Allure 報告，含 index.html)
+        uses: actions/download-artifact@v4
+        with:
+          name: test-report-node20
+          path: test-report
+
+      - name: Deploy to GitHub Pages
+        if: github.ref == 'refs/heads/main' && hashFiles('test-report/**') != ''
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./test-report
+          destination_dir: ./test-report

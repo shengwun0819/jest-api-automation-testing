@@ -1,0 +1,4 @@
+**/node_modules
+dist
+allure-results
+test_report

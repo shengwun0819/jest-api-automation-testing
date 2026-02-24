@@ -1,0 +1,67 @@
+# CI：Node 20 測試 + Mock Server + ESLint + Allure 報告
+name: API Tests
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: ['20.x']
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Prepare allure-results
+        run: |
+          rm -rf allure-results allure-report
+          mkdir -p allure-results
+
+      - name: Start Mock Server
+        run: |
+          node mock_server/server.js &
+          sleep 2
+          curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:5050/posts || true
+
+      - name: Run tests (with Mock, Allure)
+        env:
+          TARGET_BASE_URL: http://127.0.0.1:5050
+        run: npx jest --runInBand --config=jest.config.allure.js
+
+      - name: Upload Allure Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results-node20
+          path: allure-results/
+          retention-days: 7
+          if-no-files-found: ignore
+
+      - name: Upload test_report (named report from reporter)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-report-node20
+          path: test_report/
+          retention-days: 7
+          if-no-files-found: ignore

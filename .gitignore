@@ -1,0 +1,7 @@
+.env
+allure-results/
+test_report/
+node_modules/
+.vscode/
+*.log
+.DS_Store
