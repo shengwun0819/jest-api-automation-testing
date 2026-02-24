@@ -1,0 +1,30 @@
+# 發布 Jest 報告到 GitHub Pages（API Tests 成功或失敗後皆可發布）
+name: Publish Test Report
+
+on:
+  workflow_run:
+    workflows: ['API Tests']
+    types: [completed]
+
+permissions:
+  contents: write
+
+jobs:
+  publish-report:
+    runs-on: ubuntu-latest
+    if: github.event.workflow_run.conclusion == 'success' || github.event.workflow_run.conclusion == 'failure'
+
+    steps:
+      - name: Download Jest Report
+        uses: actions/download-artifact@v4
+        with:
+          name: jest-report-node20
+          path: jest-report
+
+      - name: Deploy to GitHub Pages
+        if: github.ref == 'refs/heads/main' && hashFiles('jest-report/**') != ''
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./jest-report
+          destination_dir: ./test-report
