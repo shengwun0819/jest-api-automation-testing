@@ -1,5 +1,5 @@
 /**
- * Jest 測試 Worker：被 run-test controller 呼叫，在子行程中執行 Jest 並將結果 postMessage 回主行程。
+ * Jest 測試 Worker：被 run-test controller 呼叫，在 sub process 中執行 Jest 並將結果 postMessage 回 main process。
  * 可選產生 HTML 報告（USE_HTML_REPORTER=true）。
  */
 const { parentPort } = require('worker_threads');

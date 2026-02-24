@@ -30,7 +30,7 @@
 
 ### 1. 配置 (configs/)
 
-- **config.js**：讀取 `PORT`、`TARGET_BASE_URL`、`REQUEST_TIMEOUT`、`STAGE`、`API_CALLER_PUBLIC_KEY` 等。
+- **config.js**：讀取 `PORT`、`TARGET_BASE_URL`、`REQUEST_TIMEOUT`、`STAGE` 等。
 - **stage-env.js**：依 `STAGE` 提供該階段的 `TARGET_DOMAIN_NAME`，可被 `OVERRIDE_DOMAIN` 覆寫。
 
 設計上不寫死公司網域或金鑰，僅使用環境變數與範例 URL。
@@ -49,16 +49,15 @@
 
 ### 4. 可選 Koa 伺服器
 
-- **app.js**：Koa + bodyParser + 路由 + 靜態 test_report。
+- **app.js**：Koa + bodyParser + 路由 + 靜態 test_report（對外路徑 /reports）。
 - **server.js**：啟動 app，監聽 `PORT`。
 - **routers/sit.js**：`/health-check`、`/run-test`（僅單次執行，無 start/stop 壓測迴圈）。
 - **controllers/run-test.js**：以 Worker 執行 Jest 一次，回傳 `pass`、失敗數、報告檔名（不包含 S3/Slack 等外部整合）。
-- **middleware/validate-jwt.js**：若設定 `API_CALLER_PUBLIC_KEY` 則驗證 JWT；未設定或 `CODEBUILD_CI` 時略過。
 
 ## 測試執行流程
 
 1. **直接執行**：`npm test` → Jest 載入 `globalSetup`、執行 `tests/**/*.test.js`。
-2. **HTTP 觸發**：`GET /run-test?stage=dev` → middleware → `run-test` 建立 Worker → Worker 執行 Jest → 回傳 JSON 結果。
+2. **HTTP 觸發**：`GET /run-test?stage=dev` → `run-test` 建立 Worker → Worker 執行 Jest → 回傳 JSON 結果。
 
 ## 與原始企業版之差異（脫敏要點）
 

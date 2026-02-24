@@ -1,7 +1,6 @@
 /**
- * Mock API Server（與 pytest-automation-testing 概念一致）
- * 提供 GET /posts、GET /posts/:id、GET /users，不依賴外網。
- * 啟動：npm run mock 或 node mock_server/server.js
+ * Mock API Server
+ * 提供 GET /posts、GET /posts/:id、GET /users
  */
 const http = require('http');
 

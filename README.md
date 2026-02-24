@@ -21,7 +21,6 @@
 ├── libs/              # 共用模組（logger, test-woker）
 ├── mock_server/       # 本機 Mock API（GET /posts, /users），不依賴外網
 │   └── server.js
-├── middleware/        # JWT 驗證（可選）
 ├── routers/           # 路由（health-check, run-test）
 ├── tests/             # Jest 測試與 API client
 │   ├── api-client.js
@@ -103,8 +102,6 @@ curl "http://localhost:3000/run-test?stage=dev"
 curl http://localhost:3000/health-check
 ```
 
-若設定 `API_CALLER_PUBLIC_KEY`，`/run-test` 需在 Header 帶上 `Authorization: Bearer <JWT>`。未設定或於 CI（`CODEBUILD_CI=1`）時會略過 JWT 驗證。
-
 ## 環境變數說明
 
 | 變數 | 說明 | 預設 |
@@ -114,8 +111,6 @@ curl http://localhost:3000/health-check
 | `STAGE` | 階段（對應 stage-env） | dev |
 | `REQUEST_TIMEOUT` | 請求逾時（ms） | 10000 |
 | `OVERRIDE_DOMAIN` | 覆寫目標網域 | - |
-| `API_CALLER_PUBLIC_KEY` | JWT 公鑰（選填） | - |
-| `CODEBUILD_CI` | CI 時設為 1 可跳過 JWT | - |
 | `LOG_REQUEST` | 設為 1 可記錄請求日誌 | - |
 
 ## 自訂擴展

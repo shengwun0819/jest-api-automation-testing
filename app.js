@@ -1,6 +1,6 @@
 require('dotenv').config();
 /**
- * Koa 應用：掛載路由、JWT 驗證、錯誤處理，供 server.js 啟動。
+ * Koa 應用：掛載路由、錯誤處理，供 server.js 啟動。
  */
 const Koa = require('koa');
 const mount = require('koa-mount');

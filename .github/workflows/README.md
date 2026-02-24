@@ -10,13 +10,13 @@
 - 手動觸發（Actions 頁面 → API Tests → Run workflow）
 
 **步驟：**
-- 使用 **Node.js 20.x**（與 `package.json` 的 `engines` 一致）
-- `npm ci` 安裝依賴
-- `npm run lint` 執行 ESLint
-- 啟動專案內 **Mock Server**（port 5050），不需真實 API 即可跑測試
-- 使用 `jest.config.allure.js` 執行 Jest（Allure 環境，`TARGET_BASE_URL=http://127.0.0.1:5050`），結果寫入 `allure-results/`
-- 測試結束時 **allure-summary-reporter** 自動產生 `test_report/`（含 `report_{commit}_{result}_{time}.html` 與 `index.html`）
-- 上傳 Artifacts：`allure-results-node20`、`test-report-node20`，保留 7 天
+1. 使用 **Node.js 20.x**（與 `package.json` 的 `engines` 一致）
+2. `npm ci` 安裝依賴
+3. `npm run lint` 執行 ESLint
+4. 啟動專案內 **Mock Server**（port 5050），不需真實 API 即可跑測試
+5. 使用 `jest.config.allure.js` 執行 Jest（Allure 環境，`TARGET_BASE_URL=http://127.0.0.1:5050`），結果寫入 `allure-results/`
+6. 測試結束時 **allure-summary-reporter** 自動產生 `test_report/`（含 `report_{commit}_{result}_{time}.html` 與 `index.html`）
+7. 上傳 Artifacts：`allure-results-node20`、`test-report-node20`，保留 7 天
 
 ### 2. `publish-report.yml` - 發布 Allure 報告到 GitHub Pages
 
@@ -24,27 +24,17 @@
 - `test.yml`（API Tests）完成後自動觸發（成功或失敗皆會跑）
 
 **步驟：**
-- 下載 Artifact `test-report-node20`
-- 僅在 **main** 分支且有報告檔案時，部署到 GitHub Pages 的 `test-report/` 目錄（可開 `index.html` 或具名報告）
+1. 下載 Artifact `test-report-node20`
+2.  僅在 **main** 分支且有報告檔案時，部署到 GitHub Pages 的 `test-report/` 目錄（可開 `index.html` 或具名報告）
 
 **報告網址（需先於 Repo Settings 啟用 GitHub Pages，Source 選 GitHub Actions）：**
 ```
 https://<username>.github.io/<repository>/test-report/
 ```
 
-## 與 pytest-automation-testing 的對應
+## 產生 Allure 報告
 
-| pytest 專案              | jest 專案說明                         |
-|--------------------------|----------------------------------------|
-| Python 3.13 + pip        | Node 20.x + npm ci                    |
-| Mock Server (port 5050)  | Mock Server (port 5050)               |
-| pytest + Allure 報告     | Jest + **Allure**（allure-jest）       |
-| allure-report / test_report | test_report（reporter 產出，含 index.html） |
-| publish-report → Pages   | publish-report → Pages（test-report/）|
-
-## 本機產生 Allure 報告
-
-專案已內建 `allure-commandline`（需本機有 **Java**），可直接用 npm 指令：
+已建立 `allure-commandline`，可直接用 npm script：
 
 | 指令 | 說明 |
 |------|------|

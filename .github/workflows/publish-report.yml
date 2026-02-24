@@ -1,4 +1,4 @@
-# 發布 Allure 報告到 GitHub Pages（API Tests 完成後觸發）
+# 發布 Allure report 到 GitHub Pages（API Tests 完成後觸發）
 name: Publish Test Report
 
 on:

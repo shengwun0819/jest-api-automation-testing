@@ -1,5 +1,5 @@
 /**
- * Jest 自訂 reporter：測試結束後自動產生 Allure 報告（對齊 pytest conftest.py 的 pytest_terminal_summary）。
+ * reporter：測試結束後自動產生 Allure 報告。
  * 報告路徑：test_report/report_{commit_sha}_{success|failed}_{timestamp}.html
  * 時間與路徑不含 ':' 以利 GitHub Actions artifact。
  */

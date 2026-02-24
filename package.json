@@ -49,7 +49,6 @@
     "jest": "26.2.2",
     "jest-extended": "^0.11.2",
     "jest-html-reporter": "^3.4.0",
-    "jsonwebtoken": "^9.0.2",
     "koa": "^2.7.0",
     "koa-bodyparser": "^4.3.0",
     "koa-mount": "^4.0.0",
