@@ -131,7 +131,3 @@ curl http://localhost:3000/health-check
 ## 測試報告
 
 若透過 `/run-test` 觸發且啟用 HTML reporter，報告會寫入 `test_report/`，並可透過 `GET /reports/<檔名>` 存取（需先 `npm start`，靜態目錄為 test_report）。
-
-## 授權
-
-MIT License
