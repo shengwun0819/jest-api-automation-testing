@@ -107,7 +107,7 @@ curl http://localhost:3000/health-check
 | 變數 | 說明 | 預設 |
 |------|------|------|
 | `PORT` | 本機伺服器埠 | 3000 |
-| `TARGET_BASE_URL` | 測試目標 API 基底 URL；使用 Mock 時設為 `http://127.0.0.1:5050` | https://jsonplaceholder.typicode.com |
+| `TARGET_BASE_URL` | 測試目標 API 基底 URL；使用 Mock 時設為 `http://127.0.0.1:5050` | http://127.0.0.1:5050 |
 | `STAGE` | 階段（對應 stage-env） | dev |
 | `REQUEST_TIMEOUT` | 請求逾時（ms） | 10000 |
 | `OVERRIDE_DOMAIN` | 覆寫目標網域 | - |
