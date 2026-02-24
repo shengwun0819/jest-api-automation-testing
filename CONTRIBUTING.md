@@ -46,7 +46,3 @@
 ### 替換測試目標 API
 
 修改 `.env` 的 `TARGET_BASE_URL` 與 `configs/stage-env.js` 即可，無需改動測試架構。
-
-## 授權
-
-貢獻內容將依本專案 MIT 授權條款釋出。
